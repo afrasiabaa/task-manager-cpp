@@ -19,6 +19,8 @@ namespace task {
 		Task(const Task&) = default;
 		Task& operator=(const Task&) = default;
 
+		void setCompleted(const bool);
+
 		// Friend functions
 		friend std::ostream& operator<<(std::ostream& os, const Task& task)
 		{

@@ -19,28 +19,60 @@ int main(int argc, char* argv[])
 		printMenu();
 
 		int choice;
-		utils::input(choice, 1, 4);
+		utils::input(choice, 1, 5);
 		std::cin.ignore(); // Clear the stream buffer.
 
 		switch (choice)
 		{
 		case 1: 
 		{
-			
+			std::string text;
+			std::cout << "Enter task: ";
+			utils::input(text);
+			manager.addTask(text);
 			break;
 		}
 		case 2: 
 		{
-			
+			std::cout << manager;
 			break;
 		}
 		case 3:
 		{
 			
+			int index;
+			std::cout << "Enter task index: ";
+			utils::input(index);
 
+			try 
+			{
+				manager.markComplete(index);
+			}
+			catch (const std::exception& e)
+			{
+				std::cout << e.what() << '\n';
+			}
+			
 			break;
 		}
-		case 4: { running = false; break; }
+		case 4:
+		{
+			int index;
+			std::cout << "Enter index to remove: ";
+			utils::input(index);
+
+			try
+			{
+				manager.removeTask(index);
+			}
+			catch (const std::exception& e)
+			{
+				std::cout << e.what() << '\n';
+			}
+			
+			break;
+		}
+		case 5: { running = false; break; }
 
 		default: { std::cout << "Invalid option."; std::cout << std::endl; break; } 
 			   // Don't know how you would've gotten here, but just incase.
@@ -60,7 +92,8 @@ void printMenu()
 	std::cout << "| 1 | Add Task                   |\n";
 	std::cout << "| 2 | View Tasks                 |\n";
 	std::cout << "| 3 | Mark Task Complete         |\n";
-	std::cout << "| 4 | Exit                       |\n";
+	std::cout << "| 4 | Remove Task                |\n";
+	std::cout << "| 5 | Exit                       |\n";
 	std::cout << "+--------------------------------+\n";
 	std::cout << "Select an option: ";
 }

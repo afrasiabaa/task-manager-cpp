@@ -3,10 +3,11 @@
 
 #include <iostream>
 #include <string>
+#include <stdexcept>
 
 namespace utils
 {
-	int& input(int& input)
+	int input(int& input)
 	{
 		bool running = true;
 		while (running)
@@ -30,7 +31,7 @@ namespace utils
 	{
 		if (min > max) // Check proper range
 		{
-			throw "min cannot be greater than max";
+			throw std::invalid_argument("min cannot be greater than max");
 		}
 
 		bool running = true;
@@ -53,12 +54,11 @@ namespace utils
 
 	std::string& input(std::string& input)
 	{
-		std::getline(std::cin, input);
-		while (input.empty());
-		{
-			std::cout << "Invalid input. Please enter a valid string.\n";
+		do {
 			std::getline(std::cin, input);
-		}
+			if (input.empty())
+				std::cout << "Invalid input. Please enter a valid string.\n";
+		} while (input.empty());
 
 		return input;
 	}

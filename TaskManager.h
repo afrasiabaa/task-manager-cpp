@@ -18,7 +18,7 @@ namespace task
 		// Constructors
 		TaskManager();
 		TaskManager(const Task&);
-		TaskManager(const Task*, const size_t&);
+		TaskManager(const Task*, const size_t);
 		
 		// Rule of 5
 		TaskManager(const TaskManager&);
@@ -32,18 +32,20 @@ namespace task
 		// Methods
 		void addTask(const Task&);
 		void addTask(const std::string&);
+		void markComplete(size_t index);
+		void removeTask(size_t index);
 
 		// Helper functions
 		friend std::ostream& operator<<(std::ostream& os, const TaskManager& taskManager)
 		{
-			if (!taskManager.m_tasks)
+			if (taskManager.m_size == 0)
 			{
 				os << "No tasks found." << std::endl;;
 			}
 			else
 			{
 				for (size_t i = 0; i < taskManager.m_size; ++i)
-					os << taskManager.m_tasks[i];
+					os << '[' << i << "] " << taskManager.m_tasks[i];
 			}
 			return os;
 		}
