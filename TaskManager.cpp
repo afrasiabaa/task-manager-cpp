@@ -1,7 +1,11 @@
+#include <string>
 #include <algorithm>
+#include <fstream>
 #include "TaskManager.h"
 
 using namespace task;
+
+static const char* fileName = "tasks.txt";
 
 TaskManager::TaskManager() 
 {
@@ -110,7 +114,7 @@ void TaskManager::addTask(const Task& task)
 {
 	if (this->m_size == this->m_capacity) // if the size of the array is the same as the allocated memory
 	{
-		this->m_capacity = (m_capacity == 0) ? 8 : m_capacity;
+		this->m_capacity = (m_capacity == 0) ? 8 : m_capacity * 2;
 
 		Task* newTasks = new Task[m_capacity];
 		for (size_t i = 0; i < this->m_size; ++i) // Deep copy to new allocated block
@@ -158,4 +162,57 @@ void TaskManager::removeTask(size_t index)
 		this->m_tasks[i] = this->m_tasks[i + 1];
 
 	--this->m_size;
+}
+
+void TaskManager::saveToFile()
+{
+	std::ofstream file(fileName);
+	if (!file.is_open())
+		return;
+
+	if (this->m_size <= 0 || this->m_tasks == nullptr)
+		return;
+
+	// first 8 bytes reserved for the size of the tasks to make it easier
+	file << this->m_size << '\n';
+
+	// comma separated
+	for (size_t i = 0; i < this->m_size; ++i)
+		file << this->m_tasks[i].getTask() << '|' << this->m_tasks[i].getComplete() << '\n';
+
+	file.close();
+}
+
+void TaskManager::loadFromFile() // will replace any old data
+{
+	std::ifstream file(fileName);
+
+	if (!file.is_open())
+		return;
+
+	std::string token;
+	char delimiter = '|';
+	size_t i = 0;
+
+	std::getline(file, token);
+	if (token.empty())
+		return;
+
+	if (this->m_tasks)
+		delete[] m_tasks;
+
+	this->m_size = static_cast<size_t>(std::stoi(token));
+	this->m_capacity = (this->m_capacity <= m_size) ? m_size * 2 : m_capacity;
+	this->m_tasks = new Task[m_capacity];
+
+	while (std::getline(file, token, delimiter))
+	{
+		this->m_tasks[i].setTask(token);
+		std::getline(file, token);
+		this->m_tasks[i].setCompleted(static_cast<bool>(std::stoi(token)));
+		++i;
+	}
+
+
+	file.close();
 }

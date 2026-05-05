@@ -11,6 +11,8 @@ void printTitle();
 int main(int argc, char* argv[])
 {
 	task::TaskManager manager;
+	manager.loadFromFile();
+
 	bool running = true;
 
 	printTitle();
@@ -72,7 +74,12 @@ int main(int argc, char* argv[])
 			
 			break;
 		}
-		case 5: { running = false; break; }
+		case 5: 
+		{ 
+			running = false; 
+			manager.saveToFile();
+			break; 
+		}
 
 		default: { std::cout << "Invalid option."; std::cout << std::endl; break; } 
 			   // Don't know how you would've gotten here, but just incase.

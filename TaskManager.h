@@ -35,6 +35,9 @@ namespace task
 		void markComplete(size_t index);
 		void removeTask(size_t index);
 
+		void saveToFile();
+		void loadFromFile();
+
 		// Helper functions
 		friend std::ostream& operator<<(std::ostream& os, const TaskManager& taskManager)
 		{
